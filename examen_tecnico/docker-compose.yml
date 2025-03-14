@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_USER=Gabriel
+      - DB_PASSWORD=root
+      - DB_SERVER=mssql
+      - DB_NAME=Examen
+    depends_on:
+      - mssql
+    networks:
+      - mynetwork
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd  # Cambia la contraseña de administrador
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"  # Puerto del servidor SQL
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
